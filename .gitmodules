@@ -1,0 +1,9 @@
+[submodule "libs/cpluslogger"]
+	path = libs/cpluslogger
+	url = git@github.com:skletz/cpluslogger.git
+[submodule "libs/cplusutil"]
+	path = libs/cplusutil
+	url = git@github.com:skletz/cplusutil.git
+[submodule "libs/defuse"]
+	path = libs/defuse
+	url = git@github.com:skletz/defuse.git
