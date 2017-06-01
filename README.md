@@ -1,0 +1,3 @@
+#TRECVID VRETBOX
+
+VRETBOX is a Video Retrieval Evaluation Toolbox used for evaluating the large-scale test collection provided by TRECVID.  This yearly workshop focus on the evaluation of video search approaches. It is part of the Text Retrieval Conference (TREC) and consists of different disciplines concomitant by individual datasets for video search tasks. Finally, the resulted evaluations of all proposed approaches serve as a well-known benchmark in literature.
