@@ -21,7 +21,10 @@
     <ClCompile Include="..\..\vretbox\src\dextraction.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vretbox\src\trecvidtoolbox.cpp">
+    <ClCompile Include="..\..\vretbox\src\mastershot.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vretbox\src\vretbox.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,5 +41,13 @@
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\vretbox\src\mastershot.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\vretbox\default.ini">
+      <Filter>Ressourcendateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

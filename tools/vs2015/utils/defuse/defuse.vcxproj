@@ -17,6 +17,7 @@
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\dfs1xtractor.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\dfs2parameter.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\dfs2xtractor.cpp" />
+    <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\dysigxtractor.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\evaluatedquery.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\features.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\featuresignatures.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dfs2parameter.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dfs2xtractor.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\distance.hpp" />
+    <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dysigxtractor.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\evaluatedquery.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\features.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\featuresignatures.hpp" />
