@@ -1,5 +1,5 @@
-#ifndef _TOOL_HPP_
-#define  _TOOL_HPP_
+#ifndef _TOOLBASE_HPP_
+#define  _TOOLBASE_HPP_
 
 #include <boost/program_options.hpp>
 #include <cpluslogger.hpp>
@@ -27,4 +27,4 @@ namespace trecvid {
 	};
 }
 
-#endif //_TOOL_HPP_
+#endif //_TOOLBASE_HPP_

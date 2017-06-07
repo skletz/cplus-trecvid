@@ -18,7 +18,7 @@
 
 #include "dextraction.hpp"
 
-trecvid::DeXtraction::DeXtraction(): mXtractor(nullptr), mParamter(nullptr)
+trecvid::DeXtraction::DeXtraction(): mXtractor(nullptr)
 {
 	mArgs = nullptr;
 }
@@ -29,88 +29,100 @@ bool trecvid::DeXtraction::init(boost::program_options::variables_map _args)
 	bool valid = true;
 
 	mVideo = new File(mArgs["infile"].as< std::string >());
+	mFeatures = new File(mArgs["outfile"].as< std::string >());
+	mMeasurements = new File(mArgs["General.measurements"].as< std::string >());
 
-	if(mArgs["descriptor"].as< std::string >() == "dfs")
+	//Possible Settings
+	int frameSelection, maxFrames;
+	bool resetTracking;
+	int initSeeds, initialCentroids, iterations, minClusterSize;
+	float minDistance, dropThreshold;
+
+	int grayscaleBits, windowRadius;
+
+	defuse::SamplePoints::Distribution distribution;
+	defuse::SamplePoints* samplepoints;
+	std::string samplepointdir;
+
+
+	if(mArgs["General.descriptor"].as< std::string >() == "ffs")
 	{
-		mParamter = new defuse::DFS2Parameter();
 		
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.samplepoints = mArgs["Settings.samplepoints"].as<int>();
+		maxFrames = mArgs["Cfg.ffs.maxFrames"].as<int>();
 
-		int distribution = 0;
-		if(mArgs["Settings.sampling"].as<std::string>() == "random")
+		if (mArgs["Cfg.ffs.frameSelection"].as<std::string>() == "FramesPerVideo")
 		{
-			distribution = 0;
-		}else
+			frameSelection = defuse::DYSIGXtractor::FrameSelection::FramesPerVideo;
+		}
+		else if(mArgs["Cfg.ffs.frameSelection"].as<std::string>() == "FramesPerSecond")
 		{
-			LOG_FATAL("Settings.sampling " << mArgs["Settings.sampling"].as< std::string >() << " is not defined");
+			frameSelection = defuse::DYSIGXtractor::FrameSelection::FramesPerSecond;
+		}
+		else
+		{
+			frameSelection = defuse::DYSIGXtractor::FrameSelection::FramesPerVideo;
+			LOG_FATAL("Cfg.ffs.frameSelection " << mArgs["Cfg.ffs.frameSelection"].as< std::string >() << " is not defined");
 			valid = false;
 		}
 
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.distribution = distribution;
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.initialCentroids = mArgs["Settings.centroids"].as<int>();
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.samplepointsfile = mArgs["Settings.sample_files"].as<std::string>();
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.iterations = mArgs["Settings.iterations"].as<int>();
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.minimalWeight = mArgs["Settings.minimal_weight"].as<int>();
-		static_cast<defuse::DFS2Parameter *>(mParamter)->staticparamter.minimalDistance = mArgs["Settings.minimal_distance"].as<float>();
+		resetTracking = mArgs["Cfg.ffs.resetTracking"].as<bool>();
 
-		int frameselection = 0;
-		if (mArgs["Settings.frame_selection"].as<std::string>() == "fnfpseg1")
+		initSeeds = mArgs["Cfg.ffs.initSeeds"].as<int>();
+		initialCentroids = mArgs["Cfg.ffs.initialCentroids"].as<int>();
+		iterations = mArgs["Cfg.ffs.iterations"].as<int>();
+
+		minClusterSize = mArgs["Cfg.ffs.minClusterSize"].as<int>();
+		minDistance = mArgs["Cfg.ffs.minDistance"].as<float>();
+		dropThreshold = mArgs["Cfg.ffs.dropThreshold"].as<float>();
+
+		grayscaleBits = mArgs["Cfg.ffs.grayscaleBits"].as<int>();
+		windowRadius = mArgs["Cfg.ffs.windowRadius"].as<int>();
+
+	
+		//Process sampling
+		if (mArgs["Cfg.ffs.distribution"].as<std::string>() == "random")
 		{
-			frameselection = 0;
-		}else
+			distribution = defuse::SamplePoints::Distribution::RANDOM;
+		}
+		else if (mArgs["Cfg.ffs.distribution"].as<std::string>() == "regular")
 		{
-			LOG_FATAL("Settings.frame_selection " << mArgs["Settings.frame_selection"].as< std::string >() << " is not defined");
+			distribution = defuse::SamplePoints::Distribution::REGULAR;
+		}
+		else
+		{
+			distribution = defuse::SamplePoints::Distribution::REGULAR;
+			LOG_FATAL("Cfg.ffs.distribution " << mArgs["Cfg.ffs.distribution"].as< std::string >() << " is not defined");
 			valid = false;
 		}
 
-		static_cast<defuse::DFS2Parameter *>(mParamter)->frameSelection = frameselection;
-		static_cast<defuse::DFS2Parameter *>(mParamter)->frames = mArgs["Settings.sample_rate"].as<int>();
-		
-		mXtractor = new defuse::DFS2Xtractor(mParamter);
+		samplepointdir = mArgs["Cfg.ffs.samplepointdir"].as<std::string>();
 
+		mXtractor = new defuse::DYSIGXtractor(maxFrames, initSeeds, initialCentroids, samplepointdir, distribution);
+		mMeasurements->extendFileName(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getFilename());
+		mFeatures->addDirectoryToPath(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getFilename());
+		LOG_INFO("Settings: " << static_cast<defuse::DYSIGXtractor *>(mXtractor)->get());
 
 	}else
 	{
-		LOG_FATAL("Descriptor " << mArgs["descriptor"].as< std::string >() << " is not defined");
+		LOG_FATAL("Descriptor " << mArgs["General.descriptor"].as< std::string >() << " is not defined");
 		valid = false;
 	}
 
-
+	
 	return valid;
 }
 
 void trecvid::DeXtraction::run()
 {
+	MasterShot* shot = new MasterShot(mVideo);
+	defuse::Features* features = mXtractor->xtract(shot);
 
-	MasterShot* videoclip = new MasterShot(file, videoID, startFrameNr, clazz);
+	std::ofstream of(mMeasurements->getFile(), std::ofstream::out | std::ofstream::app);
+	of << shot->mVideoFileName << ", " << features->mExtractionTime << "\n";
 
-	defuse::Features* feature = xtract(videoclip);
+	features->writeBinary(mFeatures->getFile());
 
-	File output(outputdir->getPath(), stream.str(), ".yml");
-	output.addDirectoryToPath(descriptorshort);
-	output.addDirectoryToPath(extractionsettings);
-
-	serialize(features, output);
-
-	//delete output;
-	delete features;
+	delete shot;
 }
 
 
-
-defuse::Features* trecvid::DeXtraction::xtract(MasterShot* _videobase)
-{
-	size_t e1_start = double(cv::getTickCount());
-
-	defuse::Features* features = mXtractor->xtract(_videobase);
-
-	size_t e1_end = double(cv::getTickCount());
-
-	double elapsed_secs = (e1_end - e1_start) / double(cv::getTickFrequency());
-	features->mExtractionTime = elapsed_secs;
-	//std::unique_lock<std::mutex> guard(f());
-	//LOG_PERFMON(PTIME, "Computation-Time (secs): Extaction \t" << extractionsettings << "\t" << elapsed_secs);
-	//guard.unlock();
-
-	return features;
-}
