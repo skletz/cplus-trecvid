@@ -22,7 +22,7 @@ namespace trecvid {
 	public:
 		virtual bool init(boost::program_options::variables_map _args) = 0;
 		virtual void run() = 0;
-		virtual ~ToolBase() = 0 { };
+		~ToolBase() { };
 
 	};
 }

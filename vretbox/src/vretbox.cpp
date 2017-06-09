@@ -22,7 +22,7 @@
 #include <boost/program_options.hpp>
 
 #include "toolbase.hpp"
-#include "datainfo.hpp"
+//#include "datainfo.hpp"
 #include "dextraction.hpp"
 
 using namespace boost;
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
 
 	if(args["tool"].as< std::string >() == "info")
 	{
-		tool = new DataInfo();
+		LOG_FATAL("Not available: info");
 
 	}else if(args["tool"].as< std::string >() == "conversion")
 	{
