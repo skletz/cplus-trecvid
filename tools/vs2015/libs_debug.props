@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\..\libs\cplusutil\cplusutil\include;..\..\..\..\libs\cpluslogger\cpluslogger\include;..\..\..\..\libs\defuse\defuse\include;$(OpenCV_DIR)\include;$(Boost_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\libs\cplusutil\cplusutil\include;..\..\..\..\libs\cpluslogger\cpluslogger\include;..\..\..\..\libs\defuse\defuse\include;..\..\..\..\libs\opencv-histlib\include;..\..\..\..\libs\opencv-pctsig\cvpctsig\include;..\..\..\..\libs\opencv-tfsig\cvtfsig\include;$(OpenCV_DIR)\include;$(Boost_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

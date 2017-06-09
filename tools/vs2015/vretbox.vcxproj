@@ -64,14 +64,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vretbox\src\datainfo.cpp" />
     <ClCompile Include="..\..\vretbox\src\dextraction.cpp" />
     <ClCompile Include="..\..\vretbox\src\mastershot.cpp" />
     <ClCompile Include="..\..\vretbox\src\vretbox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\vretbox\src\datainfo.hpp" />
-    <ClInclude Include="..\..\vretbox\src\datastructures.hpp" />
     <ClInclude Include="..\..\vretbox\src\dextraction.hpp" />
     <ClInclude Include="..\..\vretbox\src\mastershot.hpp" />
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp" />

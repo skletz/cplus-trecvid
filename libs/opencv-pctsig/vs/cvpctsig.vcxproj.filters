@@ -15,45 +15,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\include\cvpctsig.h">
+    <ClInclude Include="..\cvpctsig\include\signatures.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\constants.hpp">
+    <ClInclude Include="..\cvpctsig\src\constants.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\distance.hpp">
+    <ClInclude Include="..\cvpctsig\src\distance.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\grayscale_bitmap.hpp">
+    <ClInclude Include="..\cvpctsig\src\grayscale_bitmap.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_clusterizer.hpp">
+    <ClInclude Include="..\cvpctsig\src\pct_clusterizer.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_sampler.hpp">
+    <ClInclude Include="..\cvpctsig\src\pct_sampler.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_signatures.hpp">
+    <ClInclude Include="..\cvpctsig\src\pct_signatures.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\similarity.hpp">
+    <ClInclude Include="..\cvpctsig\src\similarity.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cvpctsig\include\cvpctsig.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\grayscale_bitmap.cpp">
+    <ClCompile Include="..\cvpctsig\src\grayscale_bitmap.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\main.cpp">
+    <ClCompile Include="..\cvpctsig\src\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_clusterizer.cpp">
+    <ClCompile Include="..\cvpctsig\src\pct_clusterizer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_sampler.cpp">
+    <ClCompile Include="..\cvpctsig\src\pct_sampler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\opencv-pctsig\cvpctsig\src\pct_signatures.cpp">
+    <ClCompile Include="..\cvpctsig\src\pct_signatures.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,6 +10,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\include\cvtfsig.h" />
+    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\constants.h" />
+    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tf_signatures.h" />
+    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\main.cpp" />
+    <ClCompile Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{135EC1E9-78FE-4033-8A5C-573BECFB7415}</ProjectGuid>
     <RootNamespace>opencvtfsig</RootNamespace>
@@ -37,7 +47,6 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\libs_debug.props" />
-    <Import Project="..\..\defuse_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -64,16 +73,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\include\cvtfsig.h" />
-    <ClInclude Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\src\constants.h" />
-    <ClInclude Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\src\tf_signatures.h" />
-    <ClInclude Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\src\main.cpp" />
-    <ClCompile Include="..\..\..\..\libs\defuse\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

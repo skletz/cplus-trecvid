@@ -15,25 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\include\cvtfsig.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\constants.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tf_signatures.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
+    <ClCompile Include="..\src\histLib.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\main.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\opencv-tfsig\cvtfsig\src\tpct_signatures.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
+    <ClInclude Include="..\include\histLib.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

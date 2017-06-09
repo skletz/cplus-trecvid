@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\libs\defuse\libs\opencv-histlib\src\histLib.cpp">
+    <ClCompile Include="..\..\..\..\libs\opencv-histlib\src\histLib.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libs\defuse\libs\opencv-histlib\src\main.cpp">
+    <ClCompile Include="..\..\..\..\libs\opencv-histlib\src\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\libs\defuse\libs\opencv-histlib\include\histLib.h">
+    <ClInclude Include="..\..\..\..\libs\opencv-histlib\include\histLib.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

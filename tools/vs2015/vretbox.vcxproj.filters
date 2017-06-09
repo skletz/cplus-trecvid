@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vretbox\src\datainfo.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\vretbox\src\dextraction.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -29,12 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\vretbox\src\datainfo.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vretbox\src\datastructures.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vretbox\src\dextraction.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
