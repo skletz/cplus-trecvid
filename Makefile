@@ -116,7 +116,7 @@ libraries:
 		echo === working in $$i ; \
 		echo ============================================================================== ; \
 		cd $$i; \
-		make; \
+		make os=$(os) opencv=$(opencv) all; \
 	done
 
 copy:
