@@ -64,17 +64,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vretbox\src\dextraction.cpp" />
+    <ClCompile Include="..\..\vretbox\src\trecvidxtraction.cpp" />
     <ClCompile Include="..\..\vretbox\src\mastershot.cpp" />
     <ClCompile Include="..\..\vretbox\src\vretbox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\vretbox\src\dextraction.hpp" />
+    <ClInclude Include="..\..\vretbox\include\vretbox.hpp" />
+    <ClInclude Include="..\..\vretbox\src\trecvidxtraction.hpp" />
     <ClInclude Include="..\..\vretbox\src\mastershot.hpp" />
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\vretbox\default.ini" />
+    <None Include="..\..\testdata\config\test.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,13 +2,8 @@
 #define  _TOOLBASE_HPP_
 
 #include <boost/program_options.hpp>
-#include <cpluslogger.hpp>
-#include <cplusutil.hpp>
-#include <defuse.hpp>
 
-using namespace boost;
-
-namespace trecvid {
+namespace vretbox {
 
 	/**
 	* \brief
@@ -17,14 +12,32 @@ namespace trecvid {
 	{
 		
 	protected:
+
 		boost::program_options::variables_map mArgs;
-	
+		
 	public:
+
+		/**
+		 * \brief 
+		 */
+		virtual ~ToolBase() = 0;
+
+		/**
+		 * \brief 
+		 * \param _args 
+		 * \return 
+		 */
 		virtual bool init(boost::program_options::variables_map _args) = 0;
+
+		/**
+		 * \brief 
+		 */
 		virtual void run() = 0;
-		~ToolBase() { };
+
 
 	};
+
+	inline ToolBase::~ToolBase() {}
 }
 
 #endif //_TOOLBASE_HPP_

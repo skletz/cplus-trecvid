@@ -16,31 +16,28 @@
 *
 **/
 
+#include "toolbase.hpp"
+#include "trecvidxtraction.hpp"
+
 #include <cpluslogger.hpp>
 #include <cplusutil.hpp>
 
 #include <boost/program_options.hpp>
 
-#include "toolbase.hpp"
-//#include "datainfo.hpp"
-#include "dextraction.hpp"
 
-using namespace boost;
-using namespace trecvid;
-
-static std::string PROGNAME = "vretbox";
+static std::string PROGNAME = "VRETBOX";
 static std::string PROGDESCRIPTION= "Video Retrieval Evaluation Toolbox";
 
-program_options::variables_map processProgramOptions(const int argc, const char *const argv[]);
+boost::program_options::variables_map processProgramOptions(const int argc, const char *const argv[]);
 void showDescription();
-void showHelp(const program_options::options_description& desc);
+void showHelp(const boost::program_options::options_description& desc);
 
 int main(int argc, char const *argv[]) {
 
 	showDescription();
-	program_options::variables_map args = processProgramOptions(argc, argv);
+	boost::program_options::variables_map args = processProgramOptions(argc, argv);
 
-	ToolBase* tool = nullptr;
+	vretbox::ToolBase* tool = nullptr;
 
 	if(args["tool"].as< std::string >() == "info")
 	{
@@ -51,9 +48,9 @@ int main(int argc, char const *argv[]) {
 		LOG_FATAL("Not available: conversion");
 
 	}
-	else if (args["tool"].as< std::string >() == "extraction")
+	else if (args["tool"].as< std::string >() == "trecvid-xtraction")
 	{
-		tool = new DeXtraction();
+		tool = new trecvid::TRECVidXtraction();
 		
 	}else if (args["tool"].as< std::string >() == "evaluation")
 	{
@@ -73,84 +70,76 @@ int main(int argc, char const *argv[]) {
 
 void showDescription()
 {
-	LOG_INFO(PROGNAME
-		<< "version 1.0; "
-		<< "2017 " );
+	LOG_INFO("**** " << PROGNAME << " PROGRAM " << "(" << PROGDESCRIPTION << ")" << " - " << "VERSION 1.0 -" <<  " 2017 " << "****" );
 }
 
-void showHelp(const program_options::options_description& desc)
+void showHelp(const boost::program_options::options_description& desc)
 {
 	LOG_INFO(desc);
 }
 
-program_options::variables_map processProgramOptions(const int argc, const char *const argv[])
+boost::program_options::variables_map processProgramOptions(const int argc, const char *const argv[])
 {
-	program_options::options_description generic("Generic options");
+	boost::program_options::options_description generic("Generic options");
 	generic.add_options()
 		("help,h", "Print options")
-		("tool,t", program_options::value<std::string>()->default_value("extraction"), "The tool to be used")
-		("config", program_options::value<std::string>()->default_value("default.ini"), "Configuration file for the settings to be used")
-		("infile,i", program_options::value<std::string>(), "Input file")
-		("outfile,o", program_options::value<std::string >(), "Output file")
+		("tool,t", boost::program_options::value<std::string>()->default_value("extraction"), "The tool to be used")
+		("config", boost::program_options::value<std::string>()->default_value("default.ini"), "Configuration file for the settings to be used")
+		("infile,i", boost::program_options::value<std::string>(), "Input file")
+		("outfile,o", boost::program_options::value<std::string >(), "Output file")
 		;
 
-	//program_options::options_description hidden("Hidden options");
-	//hidden.add_options()
-	//	("outfile,o", program_options::value<std::vector<std::string> >(), "Output file")
-	//	;
-
-
 	//All possible options that will be allowed in config file for the different tools
-	program_options::options_description config("Configuration");
+	boost::program_options::options_description config("Configuration");
 	config.add_options()
-		("General.descriptor", program_options::value<std::string>()->default_value("ffs"), 
+		("General.descriptor", boost::program_options::value<std::string>()->default_value("ffs"), 
 			"which features should be extracted")
 
-		("General.measurements", program_options::value<std::string>(),
+		("General.measurements", boost::program_options::value<std::string>(),
 			"in which file should times are stored")
 
-		("Cfg.ffs.maxFrames", program_options::value<int>()->default_value(5), 
+		("Cfg.ffs.maxFrames", boost::program_options::value<int>()->default_value(5), 
 			"how many frames should be used")
-		("Cfg.ffs.frameSelection", program_options::value<std::string>()->default_value("FramesPerVideo"), 
+		("Cfg.ffs.frameSelection", boost::program_options::value<std::string>()->default_value("FramesPerVideo"), 
 			"how should the frames selected: frames-per-video, frames-per-second")
-		("Cfg.ffs.resetTracking", program_options::value<bool>()->default_value(true), 
+		("Cfg.ffs.resetTracking", boost::program_options::value<bool>()->default_value(true), 
 			"should the tracking samplepoints newly initialized for each frame")
 
-		("Cfg.ffs.initSeeds", program_options::value<int>()->default_value(100), 
+		("Cfg.ffs.initSeeds", boost::program_options::value<int>()->default_value(100), 
 			"how many samplepoints should be clustered")
-		("Cfg.ffs.initialCentroids", program_options::value<int>()->default_value(10), 
+		("Cfg.ffs.initialCentroids", boost::program_options::value<int>()->default_value(10), 
 			"how many clusters should maximal created")
 
-		("Cfg.ffs.iterations", program_options::value<int>()->default_value(5), 
+		("Cfg.ffs.iterations", boost::program_options::value<int>()->default_value(5), 
 			"how many iteration should be clustered")
-		("Cfg.ffs.minClusterSize", program_options::value<int>()->default_value(2), 
+		("Cfg.ffs.minClusterSize", boost::program_options::value<int>()->default_value(2), 
 			"what is the minimum number of samples per cluster")
-		("Cfg.ffs.minDistance", program_options::value<float>()->default_value(0.01), 
+		("Cfg.ffs.minDistance", boost::program_options::value<float>()->default_value(0.01), 
 			"what is the minimal joining distance of clusters")
-		("Cfg.ffs.dropThreshold", program_options::value<float>()->default_value(0.0), 
+		("Cfg.ffs.dropThreshold", boost::program_options::value<float>()->default_value(0.0), 
 			"what is the number of samples per cluster to drop it")
 		
-		("Cfg.ffs.samplepointdir", program_options::value<std::string>(), 
+		("Cfg.ffs.samplepointdir", boost::program_options::value<std::string>(), 
 			"directory where the samplepoints are stored")
-		("Cfg.ffs.distribution", program_options::value<std::string>()->default_value("regular"), 
+		("Cfg.ffs.distribution", boost::program_options::value<std::string>()->default_value("regular"), 
 			"what is the distribution: random, regular")
 
-		("Cfg.ffs.grayscaleBits", program_options::value<int>()->default_value(5),
+		("Cfg.ffs.grayscaleBits", boost::program_options::value<int>()->default_value(5),
 			"grayscaleBits")
-		("Cfg.ffs.windowRadius", program_options::value<int>()->default_value(4),
+		("Cfg.ffs.windowRadius", boost::program_options::value<int>()->default_value(4),
 			"windowRadius")
 		;
 
-	program_options::positional_options_description positional;
+	boost::program_options::positional_options_description positional;
 	positional.add("outfile", -1);
 
-	program_options::options_description cmdlineOptions;
-	cmdlineOptions.add(generic).add(config);// .add(hidden);
+	boost::program_options::options_description cmdlineOptions;
+	cmdlineOptions.add(generic).add(config);
 
-	program_options::options_description configfileOptions;
-	configfileOptions.add(config);// .add(hidden);
+	boost::program_options::options_description configfileOptions;
+	configfileOptions.add(config);
 
-	program_options::options_description visible("Allowed options");
+	boost::program_options::options_description visible("Allowed options");
 	visible.add(generic).add(config);
 
 	if (argc < 2)
@@ -160,14 +149,14 @@ program_options::variables_map processProgramOptions(const int argc, const char 
 		exit(EXIT_SUCCESS);
 	}
 
-	program_options::variables_map args;
-	program_options::variables_map configfileArgs;
+	boost::program_options::variables_map args;
+	boost::program_options::variables_map configfileArgs;
 
 	try
 	{
-		store(program_options::command_line_parser(argc, argv).options(cmdlineOptions).positional(positional).run(), args);
+		store(boost::program_options::command_line_parser(argc, argv).options(cmdlineOptions).positional(positional).run(), args);
 	}
-	catch (program_options::error const& e)
+	catch (boost::program_options::error const& e)
 	{
 		LOG_ERROR(e.what());
 		showHelp(visible);
@@ -184,9 +173,9 @@ program_options::variables_map processProgramOptions(const int argc, const char 
 
 	try
 	{
-		store(program_options::parse_config_file(ifs, visible), args);
+		store(parse_config_file(ifs, visible), args);
 	}
-	catch (program_options::error const& e)
+	catch (boost::program_options::error const& e)
 	{
 		LOG_ERROR(e.what());
 		showHelp(visible);
