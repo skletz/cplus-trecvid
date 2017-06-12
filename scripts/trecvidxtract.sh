@@ -1,7 +1,7 @@
 #!/bin/bash
 # ¯\_(ツ)_/¯
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#	dextract.sh
+#	trecvidxtract.sh
 # A script for extracting content features from the TREVid dataset.
 # This script uses the descriptor extraction tool of the vretbox.
 #
@@ -62,7 +62,6 @@ if [ "$(uname)" == "Darwin" ]; then
   BIN="../builds/mac/bin"
   PROG="progvretbox.1.0"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  # Do something under GNU/Linux platform
   echo "Target: Linux"
   BIN="../builds/linux/bin"
   PROG="progvretbox.1.0"
