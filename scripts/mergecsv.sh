@@ -61,7 +61,7 @@ for val in "${INPUT[@]}"; do
     while read -r line
     do
       echo -e "DEGUB:\t$line"
-      echo "$line" >> $OUTPUT
+      echo "$val,$line" >> $OUTPUT
       counter=$((counter+1))
     done < $val
 done
