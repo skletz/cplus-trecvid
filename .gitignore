@@ -257,3 +257,5 @@ nbdist/
 .DS_Store
 
 builds/
+builds/*
+*/builds/

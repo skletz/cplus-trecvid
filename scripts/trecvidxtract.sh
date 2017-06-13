@@ -74,4 +74,5 @@ fi
 IN_NAME=$(basename "$INFILE")
 OUT_NAME=$(basename "$OUTFILE")
 
+echo -e "srvid:\t$SRV\t$BIN/$PROG --config $CONFIGFILE -i "$INFILE" $OUTFILE/${IN_NAME%.*}.bin"
 $BIN/$PROG --config "$CONFIGFILE" -i "$INFILE" "$OUTFILE/${IN_NAME%.*}.bin"

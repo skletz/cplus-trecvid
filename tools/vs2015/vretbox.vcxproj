@@ -81,6 +81,7 @@
   <ItemGroup>
     <None Include="..\..\testdata\config\trecvid-gtupdate.ini" />
     <None Include="..\..\testdata\config\test.ini" />
+    <None Include="L:\TRECVID\configs\DySig_5_FramesPerVideo_true_8000_40_5_2_0.01_0_random_5_4.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

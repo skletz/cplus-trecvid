@@ -110,14 +110,14 @@ $(BUILD)/$(EXT)/%.o: $(SRC)/%.cpp
 		$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@ $(INCDIR)
 
 # make dependencies
-libraries:
-	for i in $(DEPEND); do \
-		echo ============================================================================== ; \
-		echo === working in $$i ; \
-		echo ============================================================================== ; \
-		cd $$i; \
-		make os=$(os) opencv=$(opencv) all; \
-	done
+libraries: logger util pctsignatures tfsignatuers histlib defuse
+#	for i in $(DEPEND); do \
+#		echo ============================================================================== ; \
+#		echo === working in $$i ; \
+#		echo ============================================================================== ; \
+#		cd $$i; \
+#		make os=$(os) opencv=$(opencv) all; \
+#	done
 
 copy:
 	for i in $(DEPEND); do \
