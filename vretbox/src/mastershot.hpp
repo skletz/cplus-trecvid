@@ -26,6 +26,11 @@ namespace trecvid {
 		/**
 		* \brief
 		*/
+		MasterShot(int _vid, int _sid, int _start, int _end, float _fps, int _width, int _height);
+
+		/**
+		* \brief
+		*/
 		~MasterShot() {};
 	};
 }

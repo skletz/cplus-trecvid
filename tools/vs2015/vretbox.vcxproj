@@ -64,17 +64,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\vretbox\src\avsquery.cpp" />
+    <ClCompile Include="..\..\vretbox\src\trecvidupdate.cpp" />
     <ClCompile Include="..\..\vretbox\src\trecvidxtraction.cpp" />
     <ClCompile Include="..\..\vretbox\src\mastershot.cpp" />
     <ClCompile Include="..\..\vretbox\src\vretbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vretbox\include\vretbox.hpp" />
+    <ClInclude Include="..\..\vretbox\src\avsquery.hpp" />
+    <ClInclude Include="..\..\vretbox\src\trecvidupdate.hpp" />
     <ClInclude Include="..\..\vretbox\src\trecvidxtraction.hpp" />
     <ClInclude Include="..\..\vretbox\src\mastershot.hpp" />
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\testdata\config\trecvid-gtupdate.ini" />
     <None Include="..\..\testdata\config\test.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

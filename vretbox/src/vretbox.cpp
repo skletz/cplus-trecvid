@@ -18,11 +18,13 @@
 
 #include "toolbase.hpp"
 #include "trecvidxtraction.hpp"
+#include "trecvidupdate.hpp"
 
 #include <cpluslogger.hpp>
 #include <cplusutil.hpp>
 
 #include <boost/program_options.hpp>
+
 
 
 static std::string PROGNAME = "VRETBOX";
@@ -56,6 +58,10 @@ int main(int argc, char const *argv[]) {
 	{
 		LOG_FATAL("Not available: evaluation");
 	}
+	else if (args["tool"].as< std::string >() == "trecvid-gtupdate")
+	{
+		tool = new trecvid::TRECVidUpdate();
+	}
 	else
 	{
 		LOG_FATAL("Tool " << args["tool"].as< int >() << " is not defined");
@@ -63,7 +69,14 @@ int main(int argc, char const *argv[]) {
 
 	if(tool->init(args)) tool->run();
 
-	delete tool;
+	try
+	{
+		delete tool;
+	}catch(std::exception& e)
+	{
+		LOG_ERROR("Deleting Toolbase pointer exception " << e.what());
+	}
+	
 
 	return EXIT_SUCCESS;
 }
@@ -89,7 +102,7 @@ boost::program_options::variables_map processProgramOptions(const int argc, cons
 		("outfile,o", boost::program_options::value<std::string >(), "Output file")
 		;
 
-	//All possible options that will be allowed in config file for the different tools
+	//All possible options that will be allowed in config file for the extraction tool
 	boost::program_options::options_description config("Configuration");
 	config.add_options()
 		("General.descriptor", boost::program_options::value<std::string>()->default_value("ffs"), 
@@ -128,7 +141,11 @@ boost::program_options::variables_map processProgramOptions(const int argc, cons
 			"grayscaleBits")
 		("Cfg.ffs.windowRadius", boost::program_options::value<int>()->default_value(4),
 			"windowRadius")
+		//All possible options that will be allowed in config file for the ground truth update tool
+		("Cfg.gtupdate.mastershots", boost::program_options::value<std::string>()->default_value("mastershots.csv"),
+			"which list of master shots should be eleminated")
 		;
+
 
 	boost::program_options::positional_options_description positional;
 	positional.add("outfile", -1);

@@ -24,6 +24,12 @@
     <ClCompile Include="..\..\vretbox\src\trecvidxtraction.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\vretbox\src\trecvidupdate.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vretbox\src\avsquery.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp">
@@ -38,9 +44,18 @@
     <ClInclude Include="..\..\vretbox\src\trecvidxtraction.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\vretbox\src\trecvidupdate.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vretbox\src\avsquery.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\testdata\config\test.ini">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\testdata\config\trecvid-gtupdate.ini">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

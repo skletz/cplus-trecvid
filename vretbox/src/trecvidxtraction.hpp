@@ -1,5 +1,5 @@
-#ifndef _DEXTRACTION_HPP_
-#define  _DEXTRACTION_HPP_
+#ifndef _TRECVIDXTRACTION_HPP_
+#define  _TRECVIDXTRACTION_HPP_
 
 #include "toolbase.hpp"
 #include <defuse.hpp>
@@ -46,4 +46,4 @@ namespace trecvid {
 	};
 }
 
-#endif //_DEXTRACTION_HPP_
+#endif //_TRECVIDXTRACTION_HPP_
