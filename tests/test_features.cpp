@@ -59,6 +59,17 @@ namespace features
 			delete features;
 		}
 
+		TEST_METHOD(WriteFeaturesToYML)
+		{
+
+		}
+
+
+		TEST_METHOD(ReadFeaturesFromYML)
+		{
+
+		}
+
 		//TEST_METHOD(WriteBinaryTestImpl)
 		//{
 		//	std::ofstream outfile(FEATUREFILETESTIMPL, std::ios::out);

@@ -113,12 +113,12 @@ bool trecvid::TRECVidXtraction::init(boost::program_options::variables_map _args
 		static_cast<defuse::DYSIGXtractor *>(mXtractor)->mClusterDropThreshold = dropThreshold;
 		static_cast<defuse::DYSIGXtractor *>(mXtractor)->mResetTracking = resetTracking;
 
-		mXtractionTimes->extendFileName(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getFilename());
-		mFeatures->addDirectoryToPath(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getFilename());
+		mXtractionTimes->extendFileName(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getXtractorID());
+		mFeatures->addDirectoryToPath(static_cast<defuse::DYSIGXtractor *>(mXtractor)->getXtractorID());
 
 		LOG_INFO("**** " << "TRECVidXtraction Tool " << "**** ");
 		LOG_INFO("**** " << "Settings");
-		LOG_INFO("**** " << static_cast<defuse::DYSIGXtractor *>(mXtractor)->get());
+		LOG_INFO("**** " << static_cast<defuse::DYSIGXtractor *>(mXtractor)->toString());
 		LOG_INFO("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 
 	}else

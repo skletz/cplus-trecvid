@@ -88,6 +88,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\tests\make_samples.cpp" />
     <ClCompile Include="..\..\..\..\tests\test_xtractor.cpp" />
     <ClCompile Include="..\..\..\..\tests\test_features.cpp" />
     <ClCompile Include="stdafx.cpp">

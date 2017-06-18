@@ -32,5 +32,8 @@
     <ClCompile Include="..\..\..\..\tests\test_xtractor.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\tests\make_samples.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

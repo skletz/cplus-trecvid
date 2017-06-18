@@ -3,6 +3,7 @@
 
 #include "../src/toolbase.hpp"
 #include "../src/mastershot.hpp"
-#include "../src/dextraction.hpp"
+#include "../src/trecvidxtraction.hpp"
+#include "../src/trecvidupdate.hpp"
 
 #endif //_VRETBOX_HPP_

@@ -16,9 +16,7 @@
 *
 **/
 
-#include "toolbase.hpp"
-#include "trecvidxtraction.hpp"
-#include "trecvidupdate.hpp"
+#include "../include/vretbox.hpp"
 
 #include <cpluslogger.hpp>
 #include <cplusutil.hpp>
@@ -37,52 +35,63 @@ void showHelp(const boost::program_options::options_description& desc);
 int main(int argc, char const *argv[]) {
 
 	showDescription();
-	boost::program_options::variables_map args = processProgramOptions(argc, argv);
+	boost::program_options::variables_map args;
+	try
+	{
+		args = processProgramOptions(argc, argv);
+	}
+	catch (std::exception& e)
+	{
+		LOG_ERROR(PROGNAME << " Error: Programm options cannot be used." << " Exception: " << e.what());
+	}
 
 	vretbox::ToolBase* tool = nullptr;
 
-	if(args["tool"].as< std::string >() == "info")
-	{
-		LOG_FATAL("Not available: info");
-
-	}else if(args["tool"].as< std::string >() == "conversion")
-	{
-		LOG_FATAL("Not available: conversion");
-
-	}
-	else if (args["tool"].as< std::string >() == "trecvid-xtraction")
+	if (args["tool"].as< std::string >() == "trecvid-xtraction")
 	{
 		tool = new trecvid::TRECVidXtraction();
 		
-	}else if (args["tool"].as< std::string >() == "evaluation")
-	{
-		LOG_FATAL("Not available: evaluation");
-	}
-	else if (args["tool"].as< std::string >() == "trecvid-gtupdate")
+	}else if (args["tool"].as< std::string >() == "trecvid-gtupdate")
 	{
 		tool = new trecvid::TRECVidUpdate();
 	}
 	else
 	{
-		LOG_FATAL("Tool " << args["tool"].as< int >() << " is not defined");
+		LOG_FATAL(PROGNAME << " Error: Tool "<< args["tool"].as< std::string >() << " is not defined.");
 	}
 
-	if(tool->init(args)) tool->run();
+	if(tool != nullptr && tool->init(args))
+	{
+		try
+		{
+			tool->run();
+		}
+		catch (std::exception& e)
+		{
+			LOG_FATAL(args["tool"].as< std::string >() << " Error: File cannot be handled: " << args["infile"].as< std::string >() << " Exception: " << e.what());
+		}
+
+	}else
+	{
+		LOG_ERROR(args["tool"].as< std::string >() << " Error: Tool initialization failed.");
+	}
+		
 
 	try
 	{
 		delete tool;
 	}catch(std::exception& e)
 	{
-		LOG_ERROR("Deleting Toolbase pointer exception " << e.what());
+		LOG_ERROR(args["tool"].as< std::string >() << " Error: Deleting tool failed." << " Exception: " << e.what());
 	}
 	
-
+	LOG_INFO("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 	return EXIT_SUCCESS;
 }
 
 void showDescription()
 {
+	LOG_INFO("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 	LOG_INFO("**** " << PROGNAME << " PROGRAM " << "(" << PROGDESCRIPTION << ")" << " - " << "VERSION 1.0 -" <<  " 2017 " << "****" );
 }
 
