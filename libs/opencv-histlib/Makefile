@@ -58,7 +58,7 @@ INCDIR+= -I./include
 
 .PHONY: all
 
-all: directories demo static
+all: directories demo static shared
 
 directories:
 	mkdir -p $(BUILD)/$(BIN)

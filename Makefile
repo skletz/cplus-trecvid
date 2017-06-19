@@ -1,12 +1,14 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #	Makefile for vretbox (Video Retrieval Evaluation Toolbox)
+#
 # @author skletz
+# @version 1.1, 19/06/17 bug fix make all
 # @version 1.0, 08/06/17
 # -----------------------------------------------------------------------------
 # CMD Arguments:	os=win,linux (sets the operating system, default=linux)
 #									opencv=usr,opt (usr=/user/local/, opt=/opt/local/; default=usr)
 # -----------------------------------------------------------------------------
-# @TODO: Make for Windows (currently the option is only considered)
+# @TODO: Make for Windows (currently only option is considered)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Default command line arguments
@@ -91,67 +93,109 @@ PCTSIGNATURES="./libs/opencv-pctsig"
 TFSIGNATURES="./libs/opencv-tfsig"
 DEFUSEDIR="./libs/defuse"
 
-# Dependencies
-DEPEND = ./libs/cplusutil ./libs/cpluslogger ./libs/opencv-histlib ./libs/opencv-pctsig ./libs/opencv-tfsig ./libs/defuse
-
 .PHONY: all
 
-all: directories libraries copy prog
+all: clean directories libraries prog
 
 directories:
+	@echo "==============================================================================" ;
+	@echo "Making Directories"
+	@echo "==============================================================================" ;
 	mkdir -p $(BUILD)/$(BIN)
 	mkdir -p $(BUILD)/$(LIB)
 	mkdir -p $(BUILD)/$(EXT)
 
-prog: $(OBJECTS)
-		$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(BUILD)/$(BIN)/prog$(PROJECT).$(VERSION) $(LDLIBSOPTIONS)
+prog: obj
+	@echo "==============================================================================" ;
+	@echo "Making Program"
+	@echo "==============================================================================" ;
+
+obj: $(OBJECTS)
+			$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(BUILD)/$(BIN)/prog$(PROJECT).$(VERSION) $(LDLIBSOPTIONS)
 
 $(BUILD)/$(EXT)/%.o: $(SRC)/%.cpp
 		$(CXX) $(CXXFLAGS) -fPIC -c $< -o $@ $(INCDIR)
 
 # make dependencies
 libraries: logger util pctsignatures tfsignatuers histlib defuse
-#	for i in $(DEPEND); do \
-#		echo ============================================================================== ; \
-#		echo === working in $$i ; \
-#		echo ============================================================================== ; \
-#		cd $$i; \
-#		make os=$(os) opencv=$(opencv) all; \
-#	done
-
-copy:
-	for i in $(DEPEND); do \
-	echo ============================================================================== ; \
-	echo === copying $$i ; \
-	echo ============================================================================== ; \
-		cp -f $$i/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN); \
-		cp -f $$i/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB); \
-		cp -f $$i/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT); \
-	done
 
 logger:
-	echo "CPLUSLogger: " $(LOGGER)
+	@echo "==============================================================================" ;
+	@echo "Making CPLUSLogger: " $(LOGGER)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(LOGGER)/ clean
 	$(MAKE) -C $(LOGGER)/ all
+	@echo "==============================================================================" ;
+	@echo "Copying CPLUSLogger: " $(LOGGER)
+	@echo "==============================================================================" ;
+	cp -f $(LOGGER)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(LOGGER)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(LOGGER)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 util:
-	echo "CPLUSUtil: " $(UTIL)
+	@echo "==============================================================================" ;
+	@echo "Making CPLUSUtil: " $(UTIL)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(UTIL)/ clean
 	$(MAKE) -C $(UTIL)/ all
+	@echo "==============================================================================" ;
+	@echo "Copying CPLUSUtil: " $(UTIL)
+	@echo "==============================================================================" ;
+	cp -f $(UTIL)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(UTIL)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(UTIL)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 pctsignatures:
-	echo "Position-Color-Texture Signatures: " $(PCTSIGNATURES)
+	@echo "==============================================================================" ;
+	@echo "Making Position-Color-Texture Signatures: " $(PCTSIGNATURES)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(PCTSIGNATURES)/ os=$(os) opencv=$(opencv) clean
 	$(MAKE) -C $(PCTSIGNATURES)/ os=$(os) opencv=$(opencv) all
+	@echo "==============================================================================" ;
+	@echo "Copying Position-Color-Texture Signatures: " $(PCTSIGNATURES)
+	@echo "==============================================================================" ;
+	cp -f $(PCTSIGNATURES)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(PCTSIGNATURES)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(PCTSIGNATURES)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 tfsignatuers:
-	echo "Track-based Signatures: " $(TFSIGNATURES)
+	@echo "==============================================================================" ;
+	@echo "Making Track-based Signatures: " $(TFSIGNATURES)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(TFSIGNATURES)/ os=$(os) opencv=$(opencv) clean
 	$(MAKE) -C $(TFSIGNATURES)/ os=$(os) opencv=$(opencv) all
+	@echo "==============================================================================" ;
+	@echo "Copying Track-based Signatures: " $(TFSIGNATURES)
+	@echo "==============================================================================" ;
+	cp -f $(TFSIGNATURES)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(TFSIGNATURES)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(TFSIGNATURES)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 histlib:
-	echo "OpenCV-HistLib: " $(CVHISTLIB)
+	@echo "==============================================================================" ;
+	@echo "Making OpenCV-HistLib: " $(CVHISTLIB)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(CVHISTLIB)/ os=$(os) opencv=$(opencv) clean
 	$(MAKE) -C $(CVHISTLIB)/ os=$(os) opencv=$(opencv) all
+	@echo "==============================================================================" ;
+	@echo "Copying OpenCV-HistLib: " $(CVHISTLIB)
+	@echo "==============================================================================" ;
+	cp -f $(CVHISTLIB)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(CVHISTLIB)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(CVHISTLIB)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 defuse:
-	echo "DeFUSE: " $(DEFUSEDIR)
+	@echo "==============================================================================" ;
+	@echo "Making DeFUSE: " $(DEFUSEDIR)
+	@echo "==============================================================================" ;
+	$(MAKE) -C $(DEFUSEDIR)/ os=$(os) opencv=$(opencv) clean
 	$(MAKE) -C $(DEFUSEDIR)/ os=$(os) opencv=$(opencv) all
+	@echo "==============================================================================" ;
+	@echo "Copying DeFUSE: " $(DEFUSEDIR)
+	@echo "==============================================================================" ;
+	cp -f $(DEFUSEDIR)/$(BUILD)/$(BIN)/* ./$(BUILD)/$(BIN);
+	cp -f $(DEFUSEDIR)/$(BUILD)/$(LIB)/* ./$(BUILD)/$(LIB);
+	cp -f $(DEFUSEDIR)/$(BUILD)/$(EXT)/* ./$(BUILD)/$(EXT);
 
 clean:
 	rm -rf $(BUILD)

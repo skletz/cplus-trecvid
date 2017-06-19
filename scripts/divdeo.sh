@@ -35,8 +35,8 @@ MSB_DIR=""
 OUTDIR=""
 P_ID=""
 SEP="# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
-TOOL=ffmpeg
-INFO=ffprobe
+TOOL=avconv
+INFO=avprobe
 
 # parse command line
 if [ $# -eq 0 ]; then #  must be at least one arg
