@@ -99,7 +99,7 @@ dirname="$(basename "$(dirname "$file")")"
 
 echo -e "DEBUG:\tprocess file:\t$file"
 
-if echo $filename | grep -Eq '[0-9]+_[0-9]+_[0-9]+-[0-9]+_[0-9]+.[0-9]+_[0-9]+x[0-9]+.mp4'
+if echo $filename | grep -Eq '[0-9]+_[0-9]+_[0-9]+-[0-9]+_[0-9]+.[0-9]+_[0-9]+x[0-9]+'
 then
   func_getVar $filename
 

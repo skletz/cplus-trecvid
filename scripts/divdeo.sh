@@ -1,24 +1,42 @@
 #!/bin/bash
-
+# ¯\_(ツ)_/¯
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#	divdeo.sh
 # A script for dividing the videos of the TREVid dataset into the proposed master-shots
-# Requirements: avprobe, avconv
+# Dependencies: avprobe, avconv
+#
+# Inputs: 1) Video-File
+#         2) Directory of master shot boundaries
+#         3) ID (Server-ID in order to distinguish between different outputs)
+# Outputs:  1) Master shot files
+#
 # @author skletz
+# @version 1.2 19/06/07 shots with only one frame are now extracted as image
 # @version 1.1 23/05/07
 # @making 15/05/07
+# -----------------------------------------------------------------------------
+# @TODO:
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-VDO_FILE=""
-MSB_DIR=""
-P_ID=""
 
-USAGE="A script for dividing the videos of the TREVid dataset into the proposed master-shots avprobe, avconv
+USAGE="A script for dividing the videos of the TREVid dataset into the proposed master-shots with avprobe and avconv
 The output contains two further files: videos-msb-l1s.csv (shots that are less than 1 second), videos-msb.csv (all extracted shots)
 Usage: `basename $0` [-video] [-MSB]
     -h    Shows help
-    -v    Video-File <.MP4>
-    -s    VDO_DIRectory that contain the master shot boundaries <Video-File.MSB>: <startframe>,<endframe>
-    -p    ID <p1,p2 ...> for the identificaiton of the output files
+    -i    Video-File <.MP4>
+    -m    Directory that contains master shot boundaries <Video-File-Name.CSV>: <startframe>,<endframe>
+    -o    The path to the output directory
+    -s    Server-ID <s1,s2 ...> for the identification of the output files on different servers
  Examples:
-    bash `basename $0` -v ../data/trecvid/videos/35345.mp4 -s ../data/trecvid/msbs/ -p p1"
+    bash `basename $0` -i ../testdata/videos/39238.mp4 -m ../testdata/msbs -o ../testdata/shots -s s1"
+
+VDO_FILE=""
+MSB_DIR=""
+OUTDIR=""
+P_ID=""
+SEP="# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
+TOOL=ffmpeg
+INFO=ffprobe
 
 # parse command line
 if [ $# -eq 0 ]; then #  must be at least one arg
@@ -26,13 +44,14 @@ if [ $# -eq 0 ]; then #  must be at least one arg
     exit 1
 fi
 
-while getopts v:s:p:h OPT; do
+while getopts i:m:o:s:h OPT; do
     case $OPT in
     h)  echo "$USAGE"
         exit 0 ;;
-    v)  VDO_FILE=$OPTARG ;;
-    s)  MSB_DIR=$OPTARG ;;
-    p)  P_ID=$OPTARG ;;
+    i)  VDO_FILE=$OPTARG ;;
+    m)  MSB_DIR=$OPTARG ;;
+    o)  OUTDIR=$OPTARG ;;
+    s)  P_ID=$OPTARG ;;
     \?) # getopts issues an error message
         echo "$USAGE" >&2
         exit 1 ;;
@@ -40,43 +59,29 @@ while getopts v:s:p:h OPT; do
 done
 shift `expr $OPTIND - 1`
 
-# show input
-echo "Video-File: $VDO_FILE; VDO_DIRectory of Master-Shot-Boundaries: $MSB_DIR"
+#show input
+echo $SEP
+printf "%-20s %s\n" "input file :"  "$VDO_FILE"
+printf "%-20s %s\n" "input directory :"   "$MSB_DIR"
+printf "%-20s %s\n" "output directory :"   "$OUTDIR"
+printf "%-20s %s\n" "server id :"    "$P_ID"
+echo $SEP
 
-# prepare output
+#prepare input
 VDO_FILENAME=$(basename "$VDO_FILE")
 VDO_DIR=$(dirname "$VDO_FILE")
-OUTPUTSHOT_DIR=$(dirname "$VDO_DIR")/shots
-OUTPUTFILES_DIR=$(dirname "$VDO_DIR")
-OUTPUFILE_MSB=$P_ID"_videos-msb.csv"
-#less than 1 second
-OUTPUFILE_L1S=$P_ID"_videos-msb-l1s.csv"
-#less than 5 frames
-OUTPUFILE_L5F=$P_ID"_videos-msb-l5f.csv"
 MSB_FILE=$MSB_DIR/${VDO_FILENAME%.*}.csv
 
-echo "MSB-File: $MSB_FILE; Outpu-Dir: $OUTPUTSHOT_DIR; Output-Files: $OUTPUTFILES_DIR/$OUTPUFILE_L1S, $OUTPUTFILES_DIR/$OUTPUFILE_MSB"
-
-#rm -rf $OUTPUTSHOT_DIR
-#rm -rf $OUTPUTFILES_DIR/$OUTPUFILE_L1S
-#rm -rf $OUTPUTFILES_DIR/$OUTPUFILE_L5F
-#rm -rf $OUTPUTFILES_DIR/$OUTPUFILE_MSB
-mkdir -p "$OUTPUTSHOT_DIR"
-touch $OUTPUTFILES_DIR/$OUTPUFILE_L1S
-touch $OUTPUTFILES_DIR/$OUTPUFILE_L5F
-touch $OUTPUTFILES_DIR/$OUTPUFILE_MSB
+OUTPUT=$OUTDIR
 
 # get video information
-FPS=$(avprobe -v error -show_format -show_streams ${VDO_FILE} | grep avg_frame_rate | head -n1 | cut -d '=' -f 2)
+echo "Search for fps, widht, height using avprobe ..."
+FPS=$(${INFO} -v error -show_format -show_streams ${VDO_FILE} | grep avg_frame_rate | head -n1 | cut -d '=' -f 2)
 FPS=$(echo "scale=2; ${FPS}" | bc -l)
-WIDTH=$(avprobe -v error -show_format -show_streams ${VDO_FILE} | grep width | cut -d '=' -f 2)
-HEIGHT=$(avprobe -v error -show_format -show_streams ${VDO_FILE} | grep height | cut -d '=' -f 2)
-echo "Video: $VDO_FILE; FPS: $FPS; WIDTH: $WIDTH; HEIGHT: $HEIGHT"
+WIDTH=$(${INFO} -v error -show_format -show_streams ${VDO_FILE} | grep ^width= | cut -d '=' -f 2)
+HEIGHT=$(${INFO} -v error -show_format -show_streams ${VDO_FILE} | grep ^height= | cut -d '=' -f 2)
+echo "Found video attributes in: $VDO_FILE with FPS: $FPS; WIDTH: $WIDTH; HEIGHT: $HEIGHT"
 #BITRATE=$(avprobe -v error -show_format -show_streams ${VDO_FILE} | grep -m2 bit_rate | tail -n1 | cut -d '=' -f 2)
-
-#input stream
-INPUT=$MSB_FILE
-OLDIFS=$IFS
 
 #line number is the shot id in msb files
 shotid=0
@@ -86,54 +91,53 @@ IFS=","
 [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
 while read start end
 do
+  echo $SEP
+  echo "Process master shot boundary using $MSB_FILE ..."
+
   #shot id starts with line 1
   shotid=$((shotid+1))
   SECOND_START=$(echo "$start / $FPS" | bc -l);
   SECOND_END=$(echo $end / $FPS | bc -l);
   TIMESTAMP=$SECOND_START
-  echo "Start: $start; End: $end"
   #TIMESTAMP=$(date -d@$SECOND_START -u +%H:%M:%S.%s)
 
-  DURATION=$(echo $SECOND_END - $SECOND_START | bc -l);
+  #DURATION=$(echo $SECOND_END-$SECOND_START | bc -l);
+  #DURATION=$(echo $DURATION | bc -l);
   #frames per segment
-  FRAMES_SEGMENT=$(echo "$end - $start" | bc -l);
-  echo "Frames per Segment: $FRAMES_SEGMENT"
+  FRAMECNT=$(echo "($end - $start) + 1" | bc -l);
+  DURATION=$(echo $FRAMECNT/$FPS | bc -l);
+  echo "Found master shot: id: $shotid, start: $start, end: $end, start timestamp: $TIMESTAMP, #frames: $FRAMECNT, duration: $DURATION"
 
-  if (($(bc <<< "$DURATION < 1")))
-  then
-    echo "===> Shot has less than 1 second (duration)"
-    #ffmpeg, avprobe invalid input if the leading zero is missing
-    DURATION=0$(echo "$DURATION")
-    #VIDEO ID, SHOT ID = start frame number, end frame number
-    echo "$VDO_FILE,$MSB_FILE,${VDO_FILENAME%.*},$shotid,$start,$end,$FRAMES_SEGMENT,$DURATION,$FPS" >> $OUTPUTFILES_DIR/$OUTPUFILE_L1S
-    #continue
-  fi
-
-  if (($(bc <<< "$FRAMES_SEGMENT < 5")))
-  then
-    echo "===> Shot has less than 5 frames per segment"
-    #VIDEO ID, SHOT ID = start frame number, end frame number
-    echo "$VDO_FILE,$MSB_FILE,${VDO_FILENAME%.*},$shotid,$start,$end,$FRAMES_SEGMENT,$DURATION,$FPS" >> $OUTPUTFILES_DIR/$OUTPUFILE_L5F    #continue
-  fi
-
-  if (($(bc <<< "$TIMESTAMP < 1")))
+  if (($(bc <<< "$TIMESTAMP < 1 && $TIMESTAMP != 0")))
   then
     TIMESTAMP=0$(echo "$TIMESTAMP")
   fi
 
-  OUTPUT=${VDO_FILENAME%.*}"_"$shotid"_"$start-$end"_"$FPS"_"$WIDTH"x"$HEIGHT.mp4
-  echo "$VDO_FILE,$MSB_FILE,${VDO_FILENAME%.*},$shotid,$start,$end,$FPSEGMENT,$DURATION,$FPS" >> $OUTPUTFILES_DIR/$OUTPUFILE_MSB
+  if (($(bc <<< "$DURATION < 1 && $DURATION != 0")))
+  then
+    DURATION=0$(echo "$DURATION")
+  fi
+
+  OUTPUT=${VDO_FILENAME%.*}"_"$shotid"_"$start-$end"_"$FPS"_"$WIDTH"x"$HEIGHT
+  COMMAND=""
+  if (($(bc <<< "$FRAMECNT == 1"))) #save an image
+  then
+    OUTPUT="${OUTPUT}.jpg"
+    COMMAND="$TOOL -y -i $VDO_FILE -ss $TIMESTAMP -frames:v 1 $OUTDIR/$OUTPUT"
+
+  else
+    OUTPUT="${OUTPUT}.mp4"
+    COMMAND="$TOOL -y -i $VDO_FILE -ss $TIMESTAMP -t $DURATION -r $FPS -c:v libx264 -an -sn $OUTDIR/$OUTPUT"
+  fi
+
+  #outputfile
+  echo "Output File: $OUTDIR/$OUTPUT"
 
   #DURATION=$(date -d@$DURATION -u +%H:%M:%S.%s)
 
-  echo "TIMESTAMP: $TIMESTAMP; SECOND: $SECOND_START"
-  echo "DURATION: $DURATION; SECOND: $SECOND_END; TMP: $(echo $SECOND_END - $SECOND_START | bc -l);"
-	echo "Shot: $start - $end"
+  echo $SEP
+  echo "Command: $COMMAND"
+  eval $COMMAND
+  echo $SEP
 
-  echo "Output: $VDO_DIR/$OUTPUT"
-  echo "avconv -i $VDO_FILE -ss $TIMESTAMP -t $DURATION -c:v libx264 -an -sn $OUTPUTSHOT_DIR/$OUTPUT"
-  avconv -y -i $VDO_FILE -ss $TIMESTAMP -t $DURATION -c:v libx264 -an -sn $OUTPUTSHOT_DIR/$OUTPUT
-
-
-done < $INPUT
-IFS=$OLDIFS
+done < $MSB_FILE
