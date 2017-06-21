@@ -118,6 +118,34 @@ namespace vretbox
 
 		}
 
+		TEST_METHOD(CreateTRECVIDFeaturesWithFixFramesBinary)
+		{
+			defuse::DYSIGXtractor* xtractor = new defuse::DYSIGXtractor(NRFRAMES, NRSAMPLEPOINTS, NRCLUSTERS, SAMPLEPOINTDIR, DISTRIBUTION);
+
+			for (int iVideo = 0; iVideo < sizeof(TRECVID_VIDEOS) / sizeof(TRECVID_VIDEOS[0]); iVideo++)
+			{
+				File* videofile = new File(TRECVID_VIDEOS[iVideo]);
+
+				defuse::VideoBase* video = new defuse::VideoBase(videofile);
+
+				defuse::Features* features = xtractor->xtract(video);
+
+				Assert::IsTrue(features != NULL, L"DYSIGXtractor returns no features", LINE_INFO());
+
+				defuse::FeatureSignatures* featuresignatures = static_cast<defuse::FeatureSignatures*>(features);
+
+				Assert::IsTrue(featuresignatures != NULL, L"Wrong type of features is returned", LINE_INFO());
+
+				std::string file = TRECVIDFEATURES + "/" + videofile->getFilename() + ".bin";
+
+				File* output = new File(file);
+
+				features->writeBinary(output->getFile());
+
+			}
+
+
+		}
 
 		TEST_METHOD(ENDOVideosWithFixFramesPerVideo)
 		{
