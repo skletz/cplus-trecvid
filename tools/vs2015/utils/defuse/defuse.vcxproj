@@ -34,11 +34,13 @@
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\sfs1xtractor.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\smd1.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\sqfd1.cpp" />
+    <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\valuator.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\videobase.cpp" />
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\xtractor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\include\defuse.hpp" />
+    <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\valuator.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\cnnfeatures.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dfs1parameter.hpp" />
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dfs1xtractor.hpp" />

@@ -30,6 +30,12 @@
     <ClCompile Include="..\..\vretbox\src\avsquery.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\vretbox\src\trecvidvaluation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vretbox\src\avsfeatures.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp">
@@ -48,6 +54,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vretbox\src\avsquery.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vretbox\src\trecvidvaluation.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vretbox\src\avsfeatures.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

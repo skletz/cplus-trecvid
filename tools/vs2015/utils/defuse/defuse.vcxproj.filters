@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\dysigxtractor.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\libs\defuse\defuse\src\valuator.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\cnnfeatures.hpp">
@@ -177,6 +180,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\dysigxtractor.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libs\defuse\defuse\src\valuator.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

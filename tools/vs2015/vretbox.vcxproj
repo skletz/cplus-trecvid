@@ -64,16 +64,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\vretbox\src\avsfeatures.cpp" />
     <ClCompile Include="..\..\vretbox\src\avsquery.cpp" />
     <ClCompile Include="..\..\vretbox\src\trecvidupdate.cpp" />
+    <ClCompile Include="..\..\vretbox\src\trecvidvaluation.cpp" />
     <ClCompile Include="..\..\vretbox\src\trecvidxtraction.cpp" />
     <ClCompile Include="..\..\vretbox\src\mastershot.cpp" />
     <ClCompile Include="..\..\vretbox\src\vretbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vretbox\include\vretbox.hpp" />
+    <ClInclude Include="..\..\vretbox\src\avsfeatures.hpp" />
     <ClInclude Include="..\..\vretbox\src\avsquery.hpp" />
     <ClInclude Include="..\..\vretbox\src\trecvidupdate.hpp" />
+    <ClInclude Include="..\..\vretbox\src\trecvidvaluation.hpp" />
     <ClInclude Include="..\..\vretbox\src\trecvidxtraction.hpp" />
     <ClInclude Include="..\..\vretbox\src\mastershot.hpp" />
     <ClInclude Include="..\..\vretbox\src\toolbase.hpp" />
