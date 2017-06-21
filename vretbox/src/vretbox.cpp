@@ -51,7 +51,12 @@ int main(int argc, char const *argv[]) {
 	{
 		tool = new trecvid::TRECVidXtraction();
 		
-	}else if (args["tool"].as< std::string >() == "trecvid-gtupdate")
+	}
+	else if (args["tool"].as< std::string >() == "trecvid-valuation")
+	{
+		tool = new trecvid::TRECVidValuation();
+	}
+	else if (args["tool"].as< std::string >() == "trecvid-gtupdate")
 	{
 		tool = new trecvid::TRECVidUpdate();
 	}
@@ -108,6 +113,7 @@ boost::program_options::variables_map processProgramOptions(const int argc, cons
 		("tool,t", boost::program_options::value<std::string>()->default_value("extraction"), "The tool to be used")
 		("config", boost::program_options::value<std::string>()->default_value("default.ini"), "Configuration file for the settings to be used")
 		("infile,i", boost::program_options::value<std::string>(), "Input file")
+		("indir", boost::program_options::value<std::string>(), "Input directory")
 		("outfile,o", boost::program_options::value<std::string >(), "Output file")
 		;
 
@@ -153,6 +159,19 @@ boost::program_options::variables_map processProgramOptions(const int argc, cons
 		//All possible options that will be allowed in config file for the ground truth update tool
 		("Cfg.gtupdate.mastershots", boost::program_options::value<std::string>()->default_value("mastershots.csv"),
 			"which list of master shots should be eleminated")
+		
+		("General.distance", boost::program_options::value<std::string>()->default_value("smd"),
+			"which distance should be used")
+		("Cfg.smd.grounddistance", boost::program_options::value<std::string>()->default_value("L2"),
+			"which groundistance should be used with in connection with smd")
+		("Cfg.smd.matchingstrategy", boost::program_options::value<std::string>()->default_value("nearest-neighbor"),
+			"which matchingstrategy should be used in smd")
+		("Cfg.smd.direction", boost::program_options::value<std::string>()->default_value("asymmetric-query"),
+			"which direction should be calculated in smd")
+		("Cfg.smd.costfunction", boost::program_options::value<std::string>()->default_value("weighted-distance"),
+			"which costfunction should be used in smd")
+		("Cfg.smd.lambda", boost::program_options::value<float>()->default_value(1.0),
+			"which value of lambda should be used with smd (only neceassary with bidirectional matching strategy)")
 		;
 
 

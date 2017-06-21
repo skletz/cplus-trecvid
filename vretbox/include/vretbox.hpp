@@ -5,5 +5,6 @@
 #include "../src/mastershot.hpp"
 #include "../src/trecvidxtraction.hpp"
 #include "../src/trecvidupdate.hpp"
+#include "../src/trecvidvaluation.hpp"
 
 #endif //_VRETBOX_HPP_

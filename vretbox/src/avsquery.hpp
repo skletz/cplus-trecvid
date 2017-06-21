@@ -7,6 +7,7 @@ namespace trecvid {
 
 	class AVSQuery : public defuse::VideoBase
 	{
+		
 	public:
 
 		int mQid;
@@ -15,12 +16,16 @@ namespace trecvid {
 
 		int mSid;
 
+		defuse::Features* mFeatures;
+
 		/**
 		* \brief
 		*/
 		AVSQuery(int _qid, int _vid, int _sid);
 
 		AVSQuery(int _vid, int _sid);
+
+		AVSQuery(int _vid, int _sid, defuse::Features* _features);
 
 		/**
 		* \brief
