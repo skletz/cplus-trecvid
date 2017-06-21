@@ -8,8 +8,8 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-const std::string FEATUREFILETESTIMPL = "../../../../testdata/featurestestimpl.bin";
-const std::string FEATUREFILE = "../../../../testdata/features.bin";
+const std::string FEATUREFILETESTIMPL = "../../../../testdata/featurestestimpl.txt";
+const std::string FEATUREFILE = "../../../../testdata/features.txt";
 float FEATURES[10] = {	0.00603927851,	5.91500819,		0.00392041653,	0.0059509456, 0.00603927851,
 						0.0098853266,	0.00140769446,	0.00837378025,	0.00130157009, 0.0098853266	};
 const int COLS = 5;
@@ -36,7 +36,6 @@ namespace features
 			delete features;
 		}
 
-
 		TEST_METHOD(ReadFeaturesFromBinary)
 		{
 			std::ifstream infile(FEATUREFILE, std::ios::in, std::ios::binary);
@@ -58,6 +57,46 @@ namespace features
 
 			delete features;
 		}
+
+
+
+		TEST_METHOD(WriteFeaturesToTextfile)
+		{
+			std::ofstream outfile(FEATUREFILE, std::ios::out);
+			Assert::AreEqual(true, outfile.is_open(), L"Feature file could not be created", LINE_INFO());
+			outfile.close();
+
+			cv::Mat vectors = cv::Mat(ROWS, COLS, CV_32F, FEATURES);
+
+			defuse::Features* features = new defuse::Features();
+			features->mVectors = vectors;
+			features->writeText(FEATUREFILE);
+			outfile.close();
+			delete features;
+		}
+
+		TEST_METHOD(ReadFeaturesFromTextfile)
+		{
+			std::ifstream infile(FEATUREFILE, std::ios::in);
+			Assert::AreEqual(true, infile.good(), L"Feature file could not be opened", LINE_INFO());
+			infile.close();
+
+			defuse::Features* features = new defuse::Features();
+
+			features->readText(FEATUREFILE);
+
+			infile.close();
+
+			cv::Mat orig = cv::Mat(ROWS, COLS, CV_32F, FEATURES);
+			cv::Mat temp;
+			cv::bitwise_xor(features->mVectors, orig, temp);
+			bool areEqual = !(cv::countNonZero(temp));
+
+			Assert::AreEqual(areEqual, true, L"Features could not be recreated", LINE_INFO());
+
+			delete features;
+		}
+
 
 		TEST_METHOD(WriteFeaturesToYML)
 		{
