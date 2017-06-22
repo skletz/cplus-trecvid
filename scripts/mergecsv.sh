@@ -4,10 +4,8 @@
 #	mergecsv.sh
 # A script to merge csv files
 #
-# Inputs: 1)
-#         2)
-# Outputs:  1)
-#           2)
+# Inputs: 1) List of CSV files to merge
+# Outputs:  1) CVS file
 #
 # @author skletz
 # @version 1.0 18/05/17
@@ -22,9 +20,9 @@ USAGE="A tool for dividing a video into shots.
 Usage: `basename $0` [-csv] [-shots]
     -h    Shows this help
     -i    Input files csv
-    -o    Output File
+    -o    Output file csv
  Examples:
-    `basename $0` -i shots1.csv -i shots2.csv -o shots.csv"
+    `bash basename $0` -i file1.csv -i file2.csv -o file-merged.csv"
 
 # parse command line
 if [ $# -eq 0 ]; then #  must be at least one arg

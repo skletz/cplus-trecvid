@@ -234,7 +234,7 @@ void trecvid::TRECVidValuation::run()
 	avgMeanAverageComputationTime /= float(queries.size());
 
 	LOG_INFO("Total Mean Average Precision for " << queries.size() << " queries is " << avgMeanAveragePrecision);
-	LOG_INFO("Total Average Computation for " << queries.size() << " queries is " << avgMeanAveragePrecision);
+	LOG_INFO("Total Average Computation for " << queries.size() << " queries is " << avgMeanAverageComputationTime << "s");
 
 	//std::vector<boost::thread*> threads;
 	//for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
