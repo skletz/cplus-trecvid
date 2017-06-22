@@ -57,7 +57,7 @@ namespace trecvid {
 
 		static bool writeQueryList(std::list<trecvid::AVSQuery*>* _queries, std::string _file);
 
-
+		void showProgress(std::string _name, int _step, int _total) const;
 
 	};
 }

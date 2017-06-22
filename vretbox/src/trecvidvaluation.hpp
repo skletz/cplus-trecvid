@@ -64,7 +64,7 @@ namespace trecvid {
 
 		std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> evaluate(AVSFeatures* _query);
 
-		defuse::EvaluatedQuery* evaluate(AVSFeatures* _query, std::vector<defuse::ResultBase*> _results, int _avgSearchTime);
+		defuse::EvaluatedQuery* evaluate(AVSFeatures* _query, std::vector<defuse::ResultBase*> _results, float _avgSearchTime);
 
 		/**
 		 * \brief Append evaluation values to csv template. Examples can be found in trecvid-maps.csv
@@ -73,6 +73,8 @@ namespace trecvid {
 		 * \return true if the addition was successful, otherwise false
 		 */
 		bool appendValuesToCSVTemplate(std::string type, std::vector<std::pair<int, float>> values) const;
+
+		void showProgress(std::string _name, int _step, int _total) const;
 	};
 
 }

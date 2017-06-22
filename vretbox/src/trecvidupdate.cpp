@@ -152,6 +152,11 @@ bool trecvid::TRECVidUpdate::writeQueryList(std::list<trecvid::AVSQuery*>* _quer
 	return successful;
 }
 
+void trecvid::TRECVidUpdate::showProgress(std::string _name, int _step, int _total) const
+{
+	cplusutil::Terminal::showProgress(_name + " ", _step + 1, _total);
+}
+
 
 trecvid::TRECVidUpdate::~TRECVidUpdate()
 {

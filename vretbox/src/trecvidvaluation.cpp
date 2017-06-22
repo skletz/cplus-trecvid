@@ -151,6 +151,22 @@ bool trecvid::TRECVidValuation::init(boost::program_options::variables_map _args
 		areArgsValid = false;
 	}
 
+	time_t now = time(nullptr);
+	static char name[20]; //is also the model name
+	strftime(name, sizeof(name), "%Y%m%d_%H%M%S", localtime(&now));
+
+	std::stringstream logfile;
+	logfile << paramter->getFilename() << "_" << mFeatures->mDirName << "_Evaluation" << ".log";
+	Directory workingdir(".");
+	File log(workingdir.getPath(), logfile.str());
+	log.addDirectoryToPath("logs");
+
+	cpluslogger::Logger::get()->logfile(log.getFile());
+	cpluslogger::Logger::get()->filelogging(true);
+	cpluslogger::Logger::get()->perfmonitoring(true);
+
+	LOG_INFO("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+	LOG_INFO("**** " << "Timestamp " << name);
 	LOG_INFO("**** " << "TRECVidValuation Tool " << "**** ");
 	LOG_INFO("**** " << "Settings");
 	LOG_INFO("**** " << paramter->get());
@@ -188,8 +204,11 @@ void trecvid::TRECVidValuation::run()
 
 	std::unordered_map<int, std::vector<AVSFeatures*>> queries;
 
-	for (int iFile = 0; iFile < files.size(); iFile++)
+	int fileSize = files.size();
+	for (int iFile = 0; iFile < fileSize; iFile++)
 	{
+		showProgress("Load features", iFile, fileSize);
+
 		std::string file = files.at(iFile);
 
 		AVSFeatures* features = new AVSFeatures();
@@ -211,13 +230,25 @@ void trecvid::TRECVidValuation::run()
 	float avgMeanAveragePrecision = 0.0;
 	float avgMeanAverageComputationTime = 0.0;
 
+	int querySize = queries.size();
+	int queryCounter = 0;
 	std::vector<std::pair<int, float>> mapvalues;
 	//evaluate mean average precision for all elements in each query group
 	for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
 	{
+		LOG_INFO("Group " << (*iQueryGroup).first << " size " << ((*iQueryGroup).second).size());
+		std::string groupnr = std::to_string((*iQueryGroup).first);
+		showProgress(groupnr, queryCounter, querySize);
+		queryCounter++;
+
+		if((*iQueryGroup).first == 0)
+		{
+			LOG_INFO("Group 0 is not in the ground truth, evaluation step is skipped.");
+			continue;
+		}
+
 		std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>>>, float, float> interim;
 		
-
 		interim = evaluate((*iQueryGroup).first, (*iQueryGroup).second);
 		avgMeanAveragePrecision += std::get<1>(interim);
 		avgMeanAverageComputationTime += std::get<2>(interim);
@@ -226,10 +257,11 @@ void trecvid::TRECVidValuation::run()
 		LOG_INFO("Average computation time for group " << (*iQueryGroup).first << " is " << std::get<2>(interim));
 
 		mapvalues.push_back(std::make_pair((*iQueryGroup).first, std::get<1>(interim)));
+
+
 	}
 
 	appendValuesToCSVTemplate("MAP", mapvalues);
-
 	avgMeanAveragePrecision /= float(queries.size());
 	avgMeanAverageComputationTime /= float(queries.size());
 
@@ -239,7 +271,7 @@ void trecvid::TRECVidValuation::run()
 	//std::vector<boost::thread*> threads;
 	//for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
 	//{
-	//	threads.push_back(new boost::thread(boost::bind(&TRECVidValuation::evaluate, this)));
+	//	threads.push_back(new boost::thread(boost::bind(&TRECVidValuation::evaluate, (*iQueryGroup).first, (*iQueryGroup).second, this)));
 	//}
 	
 
@@ -330,7 +362,7 @@ std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> trecvid::TR
 	return evaluation;
 }
 
-defuse::EvaluatedQuery* trecvid::TRECVidValuation::evaluate(AVSFeatures* _query, std::vector<defuse::ResultBase*> _results, int _avgSearchTime)
+defuse::EvaluatedQuery* trecvid::TRECVidValuation::evaluate(AVSFeatures* _query, std::vector<defuse::ResultBase*> _results, float _avgSearchTime)
 {
 	int matches = 0;
 
@@ -429,6 +461,11 @@ bool trecvid::TRECVidValuation::appendValuesToCSVTemplate(std::string type, std:
 	csvfileOut << std::endl;
 	csvfileOut.close();
 	return true;
+}
+
+void trecvid::TRECVidValuation::showProgress(std::string _name, int _step, int _total) const
+{
+	cplusutil::Terminal::showProgress(_name + " ", _step + 1, _total);
 }
 
 
