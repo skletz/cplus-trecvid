@@ -293,6 +293,8 @@ std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::Re
 
 	for(int iQuery = 0; iQuery < querySize; iQuery++)
 	{
+		showProgress("Queries", iQuery, querySize);
+
 		std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> interim = evaluate(_queries.at(iQuery));
 		std::get<0>(results).push_back(interim);
 
@@ -319,6 +321,8 @@ std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> trecvid::TR
 
 	for (int iElem = 0; iElem < modelSize; iElem++)
 	{
+		showProgress("Model", iElem, modelSize);
+
 		AVSFeatures* element = mModel.at(iElem);
 
 		size_t e1_start, e1_end;
