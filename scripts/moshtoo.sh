@@ -66,7 +66,8 @@ dirname="$(basename "$(dirname "$file")")"
 #iterate throug csv file (msb file)
 IFS=","
 [ ! -f $file ] && { echo "$file file not found"; exit 99; }
-while read srvid filename basename
+while read srvid filename basename t1 t2 t3 t4 t5 t6 t7
 do
-  mv $SRCDIR/$filename $DESTDIR/
+  echo "mv $SRCDIR/$basename.bin $DESTDIR/"
+  mv $SRCDIR/$basename.bin $DESTDIR/
 done < $file
