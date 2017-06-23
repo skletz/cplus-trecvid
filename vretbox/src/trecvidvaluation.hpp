@@ -28,6 +28,14 @@ namespace trecvid {
 
 		File* mMAPValues;
 
+		std::vector<std::pair<int, float>> mCollectedMAPvalues;
+
+		std::vector<std::pair<int, float>> mCollectedCompTimes;
+
+		float mAVGMeanAveragePrecision;
+
+		float mAVGMeanAverageComputationTime;
+
 	public:
 
 		/**
@@ -61,6 +69,8 @@ namespace trecvid {
 		* \return a triple of the evaluated interim results, its mean average precision value and its average compution time
 		*/
 		std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>>>, float, float> evaluate(int _queryid, std::vector<AVSFeatures*> _queries);
+
+		void evaluateInParallel(int _queryid, std::vector<AVSFeatures*> _queries);
 
 		std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> evaluate(AVSFeatures* _query);
 

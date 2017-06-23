@@ -59,6 +59,8 @@ trecvid::TRECVidValuation::TRECVidValuation()
 	: mDistance(nullptr), mXtractor(nullptr), mFeatures(nullptr), mGroundTruth(nullptr), mMAPValues(nullptr)
 {
 	mArgs = nullptr;
+	mAVGMeanAverageComputationTime = 0.0;
+	mAVGMeanAveragePrecision = 0.0;
 }
 
 bool trecvid::TRECVidValuation::init(boost::program_options::variables_map _args)
@@ -232,8 +234,46 @@ void trecvid::TRECVidValuation::run()
 
 	int querySize = queries.size();
 	int queryCounter = 0;
-	std::vector<std::pair<int, float>> mapvalues;
+
+	//************************************************************************************************
+	//sequential
+	//std::vector<std::pair<int, float>> mapvalues;
+	////evaluate mean average precision for all elements in each query group
+	//for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
+	//{
+	//	LOG_INFO("Group " << (*iQueryGroup).first << " size " << ((*iQueryGroup).second).size());
+	//	std::string groupnr = std::to_string((*iQueryGroup).first);
+	//	showProgress(groupnr, queryCounter, querySize);
+	//	queryCounter++;
+
+	//	if((*iQueryGroup).first == 0)
+	//	{
+	//		LOG_INFO("Group 0 is not in the ground truth, evaluation step is skipped.");
+	//		continue;
+	//	}
+
+	//	std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>>>, float, float> interim;
+	//	
+	//	interim = evaluate((*iQueryGroup).first, (*iQueryGroup).second);
+	//	avgMeanAveragePrecision += std::get<1>(interim);
+	//	avgMeanAverageComputationTime += std::get<2>(interim);
+
+	//	LOG_INFO("Mean Average Precision for group " << (*iQueryGroup).first << " is " << std::get<1>(interim));
+	//	LOG_INFO("Average computation time for group " << (*iQueryGroup).first << " is " << std::get<2>(interim));
+
+	//	mapvalues.push_back(std::make_pair((*iQueryGroup).first, std::get<1>(interim)));
+	//}
+
+	//appendValuesToCSVTemplate("MAP", mapvalues);
+	//avgMeanAveragePrecision /= float(queries.size());
+	//avgMeanAverageComputationTime /= float(queries.size());
+
+	//LOG_INFO("Total Mean Average Precision for " << queries.size() << " queries is " << avgMeanAveragePrecision);
+	//LOG_INFO("Total Average Computation for " << queries.size() << " queries is " << avgMeanAverageComputationTime << "s");
+	//************************************************************************************************
+
 	//evaluate mean average precision for all elements in each query group
+	std::vector<boost::thread*> threads;
 	for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
 	{
 		LOG_INFO("Group " << (*iQueryGroup).first << " size " << ((*iQueryGroup).second).size());
@@ -241,45 +281,30 @@ void trecvid::TRECVidValuation::run()
 		showProgress(groupnr, queryCounter, querySize);
 		queryCounter++;
 
-		if((*iQueryGroup).first == 0)
+		if ((*iQueryGroup).first == 0)
 		{
 			LOG_INFO("Group 0 is not in the ground truth, evaluation step is skipped.");
 			continue;
 		}
 
-		std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>>>, float, float> interim;
-		
-		interim = evaluate((*iQueryGroup).first, (*iQueryGroup).second);
-		avgMeanAveragePrecision += std::get<1>(interim);
-		avgMeanAverageComputationTime += std::get<2>(interim);
-
-		LOG_INFO("Mean Average Precision for group " << (*iQueryGroup).first << " is " << std::get<1>(interim));
-		LOG_INFO("Average computation time for group " << (*iQueryGroup).first << " is " << std::get<2>(interim));
-
-		mapvalues.push_back(std::make_pair((*iQueryGroup).first, std::get<1>(interim)));
-
+		threads.push_back(new boost::thread(boost::bind(&TRECVidValuation::evaluateInParallel, this, (*iQueryGroup).first, (*iQueryGroup).second)));
 
 	}
 
-	appendValuesToCSVTemplate("MAP", mapvalues);
-	avgMeanAveragePrecision /= float(queries.size());
-	avgMeanAverageComputationTime /= float(queries.size());
+	for (int iThread = 0; iThread < threads.size(); iThread++)
+	{
+		threads[iThread]->join();
+		delete threads[iThread];
+	}
 
-	LOG_INFO("Total Mean Average Precision for " << queries.size() << " queries is " << avgMeanAveragePrecision);
-	LOG_INFO("Total Average Computation for " << queries.size() << " queries is " << avgMeanAverageComputationTime << "s");
+	appendValuesToCSVTemplate("MAP", mCollectedMAPvalues);
+	appendValuesToCSVTemplate("SMD", mCollectedCompTimes);
+	mAVGMeanAveragePrecision /= float(queries.size());
+	mAVGMeanAverageComputationTime /= float(queries.size());
 
-	//std::vector<boost::thread*> threads;
-	//for (auto iQueryGroup = queries.begin(); iQueryGroup != queries.end(); ++iQueryGroup)
-	//{
-	//	threads.push_back(new boost::thread(boost::bind(&TRECVidValuation::evaluate, (*iQueryGroup).first, (*iQueryGroup).second, this)));
-	//}
-	
+	LOG_INFO("Total Mean Average Precision for " << queries.size() << " queries is " << mAVGMeanAveragePrecision);
+	LOG_INFO("Total Average Computation for " << queries.size() << " queries is " << mAVGMeanAverageComputationTime << "s");
 
-	//for(int iThread = 0; iThread < threads.size(); iThread++)
-	//{
-	//	threads[iThread]->join();
-	//	delete threads[iThread];
-	//}
 }
 
 
@@ -310,6 +335,41 @@ std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::Re
 	return results;
 }
 
+void trecvid::TRECVidValuation::evaluateInParallel(int _queryid, std::vector<AVSFeatures*> _queries)
+{
+	std::tuple<std::vector<std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>>>, float, float>  results;
+	int querySize = _queries.size();
+
+	float meanAveragePrecision = 0.0;
+	float meansAverageComputationTime = 0.0;
+
+	for (int iQuery = 0; iQuery < querySize; iQuery++)
+	{
+		showProgress("Queries", iQuery, querySize);
+
+		std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> interim = evaluate(_queries.at(iQuery));
+		std::get<0>(results).push_back(interim);
+
+		meanAveragePrecision += interim.first->mAPValue;
+		meansAverageComputationTime += interim.first->mAvgSearchtime;
+	}
+
+	meansAverageComputationTime /= float(querySize);
+	meanAveragePrecision = meanAveragePrecision / float(querySize);
+
+	std::get<1>(results) = meanAveragePrecision;
+	std::get<2>(results) = meansAverageComputationTime;
+	
+	mAVGMeanAveragePrecision += meanAveragePrecision;
+	mAVGMeanAverageComputationTime += meansAverageComputationTime;
+
+	LOG_INFO("Mean Average Precision for group " << _queryid << " is " << meanAveragePrecision);
+	LOG_INFO("Average computation time for group " << _queryid << " is " << meansAverageComputationTime);
+
+	mCollectedMAPvalues.push_back(std::make_pair(_queryid, meanAveragePrecision));
+	mCollectedCompTimes.push_back(std::make_pair(_queryid, meansAverageComputationTime));
+}
+
 std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> trecvid::TRECVidValuation::evaluate(AVSFeatures* _query)
 {
 	int modelSize = mModel.size();
@@ -321,7 +381,6 @@ std::pair<defuse::EvaluatedQuery*, std::vector<defuse::ResultBase*>> trecvid::TR
 
 	for (int iElem = 0; iElem < modelSize; iElem++)
 	{
-		showProgress("Model", iElem, modelSize);
 
 		AVSFeatures* element = mModel.at(iElem);
 

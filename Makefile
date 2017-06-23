@@ -75,7 +75,7 @@ LDLIBSOPTIONS += $(LIBS)/libcvhistlib.1.0.a
 LDLIBSOPTIONS += $(LIBS)/libcvtfsig.1.0.a
 LDLIBSOPTIONS += $(LIBS)/libcvpctsig.1.0.a
 
-LDLIBSOPTIONS += -lboost_filesystem -lboost_system -lboost_serialization -lboost_program_options
+LDLIBSOPTIONS += -lboost_filesystem -lboost_system -lboost_serialization -lboost_program_options -lboost_thread
 #IMPORTANT: Link sequence! - OpenCV libraries have to be added at the end
 LDLIBSOPTIONS += $(LDLIBSOPTIONS_POST)
 
